@@ -19,6 +19,19 @@ const TransactionEdit = () => {
 
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    axios
+      .get(`${API}/transactions/${index}`)
+      .then((res) => {
+        setItemName(res.data.item_name);
+        setAmount(res.data.amount);
+        setFrom(res.data.from);
+        setDate(res.data.date);
+        setCategory(res.data.category);
+      })
+      .catch((err) => setError(err));
+  }, []); // eslint-disable-line
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -53,19 +66,6 @@ const TransactionEdit = () => {
       .catch((err) => setError(err));
   };
 
-  useEffect(() => {
-    axios
-      .get(`${API}/transactions/${index}`)
-      .then((res) => {
-        setItemName(res.data.item_name);
-        setAmount(res.data.amount);
-        setFrom(res.data.from);
-        setDate(res.data.date);
-        setCategory(res.data.category);
-      })
-      .catch((err) => setError(err));
-  }, []); // eslint-disable-line
-
   return (
     <section className="editTransactionSection">
       <h1>Edit Transaction</h1>
@@ -80,7 +80,7 @@ const TransactionEdit = () => {
           />
         </Form.Group>
         <Form.Group controlId="formBasicAmount">
-          <Form.Label>Amount</Form.Label>
+          <Form.Label>Amount ($)</Form.Label>
           <Form.Control
             type="number"
             name="amount"

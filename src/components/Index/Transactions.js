@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { format } from "date-fns";
+import moment from "moment";
 import axios from "axios";
 import "./Transactions.scss";
 
@@ -25,6 +25,10 @@ const Transactions = () => {
     return total.toFixed(2);
   };
 
+  const formatDate = (date) => {
+    return moment(date).format("MMMM Do");
+  };
+
   return (
     <section className="transactionsSection">
       <h1>Bank Account Total: ${addAmount(transactions)}</h1>
@@ -33,7 +37,7 @@ const Transactions = () => {
           return (
             <li key={index}>
               <strong className="transactionDate">
-                {format(new Date(transaction.date), "MMMM d")}{" "}
+                {formatDate(transaction.date)}
               </strong>
               <Link to={`/transactions/${index}`} className="transactionLink">
                 {transaction.item_name}

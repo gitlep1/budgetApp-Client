@@ -73,7 +73,7 @@ const NewTransaction = () => {
           />
         </Form.Group>
         <Form.Group controlId="formBasicAmount">
-          <Form.Label>Amount</Form.Label>
+          <Form.Label>Amount ($)</Form.Label>
           <Form.Control
             type="number"
             name="amount"

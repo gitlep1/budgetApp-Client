@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
+import moment from "moment";
 import axios from "axios";
 import "./TransactionDetails.scss";
 
@@ -32,11 +33,11 @@ const TransactionDetails = () => {
   return (
     <section className="transactionDetailsSection">
       <h1>Transaction Details</h1>
-      <h3>item name: {transaction.item_name}</h3>
-      <h3>amount: {transaction.amount}</h3>
-      <h3>Date: {transaction.date}</h3>
-      <h3>from: {transaction.from}</h3>
-      <h3>category: {transaction.category}</h3>
+      <h3>Item name: {transaction.item_name}</h3>
+      <h3>Amount: ${transaction.amount}</h3>
+      <h3>Date: {moment(transaction.date).format("MMMM Do, YYYY")}</h3>
+      <h3>From: {transaction.from}</h3>
+      <h3>Category: {transaction.category}</h3>
 
       <section className="transactionLinks">
         <Link to="/transactions">
