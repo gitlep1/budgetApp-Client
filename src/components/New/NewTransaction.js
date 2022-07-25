@@ -1,18 +1,19 @@
-import { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
-import { Button, Form } from "react-bootstrap";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Form, Button } from "react-bootstrap";
 import axios from "axios";
+
+import "./NewTransaction.scss";
 
 const API = process.env.REACT_APP_API_URL;
 
-const TransactionEdit = () => {
-  const { index } = useParams();
+const NewTransaction = () => {
   const navigate = useNavigate();
 
   const [itemName, setItemName] = useState("");
   const [amount, setAmount] = useState("");
-  const [from, setFrom] = useState("");
   const [date, setDate] = useState("");
+  const [from, setFrom] = useState("");
   const [category, setCategory] = useState("");
 
   const handleChange = (e) => {
@@ -22,50 +23,44 @@ const TransactionEdit = () => {
       setItemName(value);
     } else if (name === "amount") {
       setAmount(value);
-    } else if (name === "from") {
-      setFrom(value);
     } else if (name === "date") {
       setDate(value);
+    } else if (name === "from") {
+      setFrom(value);
     } else if (name === "category") {
       setCategory(value);
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const editedTransaction = {
+    const newTransaction = {
       item_name: itemName,
       amount: Number(amount),
-      from: from,
       date: date,
+      from: from,
       category: category,
     };
-    axios
-      .put(`${API}/transactions/${index}`, editedTransaction)
+
+    await axios
+      .post(`${API}/transactions`, newTransaction)
       .then((res) => {
         navigate("/transactions");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
-  useEffect(() => {
-    axios
-      .get(`${API}/transactions/${index}`)
-      .then((res) => {
-        setItemName(res.data.item_name);
-        setAmount(res.data.amount);
-        setFrom(res.data.from);
-        setDate(res.data.date);
-        setCategory(res.data.category);
-      })
-      .catch((err) => console.log(err));
-  }, []); // eslint-disable-line
-
   return (
-    <section className="editTransactionSection">
-      <h1>Edit Transaction</h1>
-      <Form onSubmit={handleSubmit}>
+    <section className="newTransactionSection">
+      <h1>New Transaction</h1>
+      <Form
+        onSubmit={(e) => {
+          handleSubmit(e);
+        }}
+      >
         <Form.Group controlId="formBasicItemName">
           <Form.Label>Item Name</Form.Label>
           <Form.Control
@@ -84,21 +79,21 @@ const TransactionEdit = () => {
             onChange={handleChange}
           />
         </Form.Group>
-        <Form.Group controlId="formBasicFrom">
-          <Form.Label>From</Form.Label>
-          <Form.Control
-            type="text"
-            name="from"
-            value={from}
-            onChange={handleChange}
-          />
-        </Form.Group>
         <Form.Group controlId="formBasicDate">
           <Form.Label>Date</Form.Label>
           <Form.Control
             type="date"
             name="date"
             value={date}
+            onChange={handleChange}
+          />
+        </Form.Group>
+        <Form.Group controlId="formBasicFrom">
+          <Form.Label>From</Form.Label>
+          <Form.Control
+            type="text"
+            name="from"
+            value={from}
             onChange={handleChange}
           />
         </Form.Group>
@@ -111,15 +106,16 @@ const TransactionEdit = () => {
             onChange={handleChange}
           />
         </Form.Group>
-        <Button variant="primary" type="submit">
+        <Button variant="secondary" type="submit">
           Submit
         </Button>
-        <Link to="/transactions">
-          <Button variant="secondary">Cancel</Button>
-        </Link>
       </Form>
+
+      <Link to="/transactions" className="transactionLink">
+        Back to Transactions
+      </Link>
     </section>
   );
 };
 
-export default TransactionEdit;
+export default NewTransaction;
