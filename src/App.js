@@ -7,8 +7,6 @@ import Edit from "./pages/Edit";
 import Show from "./pages/Show";
 import FourOFour from "./pages/FourOFour";
 
-import "./App.scss";
-
 const App = () => {
   return (
     <section>
