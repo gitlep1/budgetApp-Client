@@ -27,7 +27,7 @@ const Transactions = () => {
 
   return (
     <section className="transactionsSection">
-      <h1>Bank Account Total: {addAmount(transactions)}</h1>
+      <h1>Bank Account Total: ${addAmount(transactions)}</h1>
       <ul>
         {transactions.map((transaction, index) => {
           return (
@@ -38,7 +38,7 @@ const Transactions = () => {
               <Link to={`/transactions/${index}`} className="transactionLink">
                 {transaction.item_name}
               </Link>
-              <span className="transactionAmount">{transaction.amount}</span>
+              <span className="transactionAmount">${transaction.amount}</span>
             </li>
           );
         })}

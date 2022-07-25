@@ -3,6 +3,8 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
 import axios from "axios";
 
+import "./TransactionEdit.scss";
+
 const API = process.env.REACT_APP_API_URL;
 
 const TransactionEdit = () => {
@@ -14,6 +16,8 @@ const TransactionEdit = () => {
   const [from, setFrom] = useState("");
   const [date, setDate] = useState("");
   const [category, setCategory] = useState("");
+
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,7 +50,7 @@ const TransactionEdit = () => {
       .then((res) => {
         navigate("/transactions");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => setError(err));
   };
 
   useEffect(() => {
@@ -59,7 +63,7 @@ const TransactionEdit = () => {
         setDate(res.data.date);
         setCategory(res.data.category);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => setError(err));
   }, []); // eslint-disable-line
 
   return (
@@ -118,6 +122,7 @@ const TransactionEdit = () => {
           <Button variant="secondary">Cancel</Button>
         </Link>
       </Form>
+      {error && <p className="error">{error}</p>}
     </section>
   );
 };

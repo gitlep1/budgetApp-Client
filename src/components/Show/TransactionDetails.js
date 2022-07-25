@@ -13,10 +13,15 @@ const TransactionDetails = () => {
   const [transaction, setTransaction] = useState({});
 
   useEffect(() => {
-    axios.get(`${API}/transactions/${index}`).then((res) => {
-      setTransaction(res.data);
-    });
-  }, [index]);
+    axios
+      .get(`${API}/transactions/${index}`)
+      .then((res) => {
+        setTransaction(res.data);
+      })
+      .catch((err) => {
+        navigate("/transaction-error");
+      });
+  }, [index, navigate]);
 
   const handleDelete = () => {
     axios.delete(`${API}/transactions/${index}`).then(() => {

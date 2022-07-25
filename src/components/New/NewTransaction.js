@@ -16,6 +16,8 @@ const NewTransaction = () => {
   const [from, setFrom] = useState("");
   const [category, setCategory] = useState("");
 
+  const [error, setError] = useState("");
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -49,7 +51,7 @@ const NewTransaction = () => {
         navigate("/transactions");
       })
       .catch((err) => {
-        console.log(err);
+        setError(err);
       });
   };
 
@@ -79,21 +81,21 @@ const NewTransaction = () => {
             onChange={handleChange}
           />
         </Form.Group>
-        <Form.Group controlId="formBasicDate">
-          <Form.Label>Date</Form.Label>
-          <Form.Control
-            type="date"
-            name="date"
-            value={date}
-            onChange={handleChange}
-          />
-        </Form.Group>
         <Form.Group controlId="formBasicFrom">
           <Form.Label>From</Form.Label>
           <Form.Control
             type="text"
             name="from"
             value={from}
+            onChange={handleChange}
+          />
+        </Form.Group>
+        <Form.Group controlId="formBasicDate">
+          <Form.Label>Date</Form.Label>
+          <Form.Control
+            type="date"
+            name="date"
+            value={date}
             onChange={handleChange}
           />
         </Form.Group>
@@ -106,14 +108,14 @@ const NewTransaction = () => {
             onChange={handleChange}
           />
         </Form.Group>
-        <Button variant="secondary" type="submit">
+        <Button variant="primary" type="submit">
           Submit
         </Button>
+        <Link to="/transactions" className="transactionLink">
+          <Button variant="secondary">Cancel</Button>
+        </Link>
       </Form>
-
-      <Link to="/transactions" className="transactionLink">
-        Back to Transactions
-      </Link>
+      {error && <p className="error">{error}</p>}
     </section>
   );
 };
