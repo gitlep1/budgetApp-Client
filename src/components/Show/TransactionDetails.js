@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { Button } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
+import { ToastContainer, toast } from "react-toastify";
 import moment from "moment";
 import axios from "axios";
 import "./TransactionDetails.scss";
@@ -13,6 +14,10 @@ const TransactionDetails = () => {
 
   const [transaction, setTransaction] = useState({});
 
+  const [Show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   useEffect(() => {
     axios
       .get(`${API}/transactions/${index}`)
@@ -24,10 +29,28 @@ const TransactionDetails = () => {
       });
   }, [index, navigate]);
 
-  const handleDelete = () => {
+  const handleDelete = (index) => {
     axios.delete(`${API}/transactions/${index}`).then(() => {
-      navigate("/transactions");
+      handleClose();
+      notify();
     });
+  };
+
+  const notify = () => {
+    toast.success(
+      "Transaction has been deleted. \n You will be redirected in 3 seconds.",
+      {
+        position: "top-center",
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+      }
+    );
+    setTimeout(() => {
+      navigate("/transactions");
+    }, 4100);
   };
 
   return (
@@ -46,10 +69,45 @@ const TransactionDetails = () => {
         <Link to={`/transactions/${index}/edit`}>
           <Button variant="secondary">Edit Transaction</Button>
         </Link>
-        <Button variant="danger" onClick={handleDelete}>
+        <Button
+          variant="danger"
+          onClick={() => {
+            handleShow();
+          }}
+        >
           Delete Transaction
         </Button>
       </section>
+
+      <Modal
+        className="transactionModal"
+        show={Show}
+        onHide={handleClose}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Transaction</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete this transaction?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="success"
+            onClick={() => {
+              handleDelete(index);
+            }}
+          >
+            Confirm
+          </Button>
+
+          <Button variant="danger" onClick={handleClose}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <ToastContainer autoClose={3000} theme="dark" />
     </section>
   );
 };

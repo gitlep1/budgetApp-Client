@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
+import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 
 import "./TransactionEdit.scss";
@@ -58,12 +59,30 @@ const TransactionEdit = () => {
       date: date,
       category: category,
     };
+
     axios
       .put(`${API}/transactions/${index}`, editedTransaction)
       .then((res) => {
-        navigate("/transactions");
+        notify();
       })
       .catch((err) => setError(err));
+  };
+
+  const notify = () => {
+    toast.success(
+      "Transaction has been updated. \n You will be redirected in 3 seconds.",
+      {
+        position: "top-center",
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+      }
+    );
+    setTimeout(() => {
+      navigate("/transactions");
+    }, 4100);
   };
 
   return (
@@ -122,6 +141,8 @@ const TransactionEdit = () => {
           <Button variant="secondary">Cancel</Button>
         </Link>
       </Form>
+
+      <ToastContainer autoClose={3000} theme="dark" />
       {error && <p className="error">{error}</p>}
     </section>
   );

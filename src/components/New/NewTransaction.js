@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
+import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 
 import "./NewTransaction.scss";
@@ -48,11 +49,28 @@ const NewTransaction = () => {
     await axios
       .post(`${API}/transactions`, newTransaction)
       .then((res) => {
-        navigate("/transactions");
+        notify();
       })
       .catch((err) => {
         setError(err);
       });
+  };
+
+  const notify = () => {
+    toast.success(
+      "A new transaction has been created. \n You will be redirected in 3 seconds.",
+      {
+        position: "top-center",
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+      }
+    );
+    setTimeout(() => {
+      navigate("/transactions");
+    }, 4100);
   };
 
   return (
@@ -115,6 +133,8 @@ const NewTransaction = () => {
           <Button variant="secondary">Cancel</Button>
         </Link>
       </Form>
+
+      <ToastContainer autoClose={3000} theme="dark" />
       {error && <p className="error">{error}</p>}
     </section>
   );
