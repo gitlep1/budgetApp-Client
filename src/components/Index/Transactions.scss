@@ -19,7 +19,8 @@
 
     li {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1em;
       width: 50%;
       margin: 0 auto;
     }
@@ -28,4 +29,16 @@
 
 .modal-backdrop {
   background-color: red;
+}
+
+.green {
+  color: green;
+}
+
+.white {
+  color: white;
+}
+
+.red {
+  color: red;
 }

@@ -76,6 +76,7 @@ const TransactionEdit = () => {
         hideProgressBar: false,
         closeOnClick: false,
         pauseOnHover: false,
+        pauseOnFocusLoss: false,
         draggable: true,
         progress: undefined,
       }

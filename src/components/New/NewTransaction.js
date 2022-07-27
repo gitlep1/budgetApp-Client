@@ -64,6 +64,7 @@ const NewTransaction = () => {
         hideProgressBar: false,
         closeOnClick: false,
         pauseOnHover: false,
+        pauseOnFocusLoss: false,
         draggable: true,
         progress: undefined,
       }

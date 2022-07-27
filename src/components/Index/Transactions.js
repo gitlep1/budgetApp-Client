@@ -1,22 +1,30 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Button, Modal } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
+import { nanoid } from "nanoid";
+
 import moment from "moment";
 import axios from "axios";
+
 import "./Transactions.scss";
+
+import TransactionModal from "./TransactionModal";
 
 const API = process.env.REACT_APP_API_URL;
 
 const Transactions = () => {
-  const [transactions, setTransactions] = useState([]);
+  const navigate = useNavigate();
 
+  const [transactions, setTransactions] = useState([]);
   const [Show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const [id, setId] = useState("");
 
   useEffect(() => {
     axios.get(`${API}/transactions`).then((res) => {
+      res.data.forEach((transaction) => {
+        transaction.id = nanoid();
+      });
       setTransactions(res.data);
     });
   }, []); // eslint-disable-line
@@ -35,13 +43,22 @@ const Transactions = () => {
     return moment(date).format("MMMM Do");
   };
 
-  const handleDelete = async (index) => {
-    await axios.delete(`${API}/transactions/${index}`).then((res) => {
-      handleClose();
+  const handleDelete = async (id, transactionIndex) => {
+    transactions.map((transaction, index) => {
+      if (transaction.id === id) {
+        transactionIndex = index;
+      }
+
+      return transactionIndex;
     });
-    axios.get(`${API}/transactions`).then((res) => {
-      setTransactions(res.data);
-    });
+
+    await axios
+      .delete(`${API}/transactions/${transactionIndex}`)
+      .then((res) => {
+        handleClose();
+        transactions.splice(transactionIndex, 1);
+        setTransactions([...transactions]);
+      });
 
     notify();
   };
@@ -53,9 +70,19 @@ const Transactions = () => {
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: false,
+      pauseOnFocusLoss: false,
       draggable: true,
       progress: undefined,
     });
+  };
+
+  const handleClose = () => {
+    setShow(false);
+  };
+
+  const handleShow = (id) => {
+    setId(id);
+    setShow(true);
   };
 
   return (
@@ -65,57 +92,50 @@ const Transactions = () => {
         {transactions.map((transaction, index) => {
           return (
             <li key={index}>
+              <div>
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    navigate(`/transactions/${index}/edit`);
+                  }}
+                >
+                  EDIT
+                </Button>
+              </div>
               <strong className="transactionDate">
                 {formatDate(transaction.date)}
               </strong>
-              <Link to={`/transactions/${index}`} className="transactionLink">
-                {transaction.item_name}
-              </Link>
+              <div>
+                <Link to={`/transactions/${index}`} className="transactionLink">
+                  {transaction.item_name}
+                </Link>
+              </div>
               <span className="transactionAmount">
                 ${transaction.amount}
                 <Button
                   variant="danger"
                   onClick={() => {
-                    handleShow();
+                    handleShow(transaction.id);
+                    // handleDelete(index);
                   }}
                 >
                   X
                 </Button>
               </span>
 
-              <Modal
-                className="transactionModal"
-                show={Show}
-                onHide={handleClose}
-                centered
-              >
-                <Modal.Header closeButton>
-                  <Modal.Title>Delete Transaction</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  Are you sure you want to delete this transaction?
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button
-                    variant="success"
-                    onClick={() => {
-                      handleDelete(index);
-                    }}
-                  >
-                    Confirm
-                  </Button>
-
-                  <Button variant="danger" onClick={handleClose}>
-                    Cancel
-                  </Button>
-                </Modal.Footer>
-              </Modal>
-
-              <ToastContainer autoClose={3000} theme="dark" />
+              <TransactionModal
+                Show={Show}
+                handleClose={handleClose}
+                id={id}
+                index={index}
+                handleDelete={handleDelete}
+              />
             </li>
           );
         })}
       </ul>
+
+      <ToastContainer autoClose={3000} theme="dark" />
     </section>
   );
 };
