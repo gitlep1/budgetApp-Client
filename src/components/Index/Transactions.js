@@ -116,7 +116,6 @@ const Transactions = () => {
                   variant="danger"
                   onClick={() => {
                     handleShow(transaction.id);
-                    // handleDelete(index);
                   }}
                 >
                   X
