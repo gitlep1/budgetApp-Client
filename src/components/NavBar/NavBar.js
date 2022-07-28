@@ -10,12 +10,15 @@ const NavBar = ({ authenticated, user, guest }) => {
 
   useEffect(() => {
     fetchData();
-  }); // eslint-disable-line
+  }, []); // eslint-disable-line
 
   const fetchData = async () => {
-    await axios.get(`${API}/transactions`).then((res) => {
-      setTransactions(res.data);
-    });
+    const interval = setInterval(async () => {
+      await axios.get(`${API}/transactions`).then((res) => {
+        setTransactions(res.data);
+      });
+    }, 1000);
+    return () => clearInterval(interval);
   };
 
   const transactionTotal = (transactions) => {
