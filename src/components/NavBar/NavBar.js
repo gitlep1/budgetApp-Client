@@ -49,7 +49,7 @@ const NavBar = ({ authenticated, user, guest }) => {
       ) : null}
       {authenticated ? (
         <div className="authStuff">
-          {guest ? <h3>Guest</h3> : <h3>{user.username}'s</h3>}
+          {guest ? <h3>Guest</h3> : <h3>{user.username}</h3>}
           Total: ${transactionTotal(transactions)}
         </div>
       ) : null}
