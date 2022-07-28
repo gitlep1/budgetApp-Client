@@ -5,7 +5,7 @@ import "./NavBar.scss";
 
 // const API = process.env.REACT_APP_API_URL;
 
-const NavBar = () => {
+const NavBar = ({ authenticated, user, guest }) => {
   // couldn't figure out how to get the total to show in the NavBar tried so many different ways. Would like to go over this in flex time \\
 
   // const [transactions, setTransactions] = useState([]);
@@ -69,16 +69,26 @@ const NavBar = () => {
       </Link>
       <ul className="navbar-nav mr-auto">
         <li className="nav-item">
-          <Link to="/transactions" className="nav-link">
+          <Link to="authenticated/transactions" className="nav-link">
             Transactions
           </Link>
         </li>
         <li>
-          <Link to="/transactions/new" className="nav-link">
+          <Link to="authenticated/transactions/new" className="nav-link">
             New Transaction
           </Link>
         </li>
       </ul>
+      {authenticated ? (
+        <div className="authStuff">
+          {guest ? (
+            <h3>Guest's</h3>
+          ) : (
+            <div>{user ? <h3>{user.userName}'s</h3> : null}</div>
+          )}
+        </div>
+      ) : null}
+      <h3 className="authStuff">Total: $0</h3>
       {/* <h3 className="NavBarTotal">${totalRef.current}</h3> */}
     </nav>
   );

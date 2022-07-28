@@ -27,10 +27,18 @@ const FourOFour = () => {
           <Button
             variant="primary"
             onClick={() => {
-              navigate("/transactions");
+              navigate("/authenticated/transactions");
             }}
           >
             Back to transactions
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            Back to homepage
           </Button>
         </Modal.Footer>
       </Modal>
