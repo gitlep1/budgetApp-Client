@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 
 import NavBar from "./components/NavBar/NavBar";
 import Sidebar from "./components/SideBar/SideBar";
@@ -14,6 +14,8 @@ import FourOFour from "./pages/FourOFour";
 import "./App.scss";
 
 const App = () => {
+  const navigate = useNavigate();
+
   const [authenticated, setAuthenticated] = useState(false);
   const [user, setUser] = useState({});
   const [guest, setGuest] = useState(false);
@@ -21,17 +23,20 @@ const App = () => {
   const handleGuest = () => {
     setGuest(true);
     setAuthenticated(true);
+    navigate("/authenticated/transactions");
   };
 
   const handleUser = (user) => {
     setUser(user);
     setAuthenticated(true);
+    navigate("/authenticated/transactions");
   };
 
   const handleLogout = () => {
     setAuthenticated(false);
     setGuest(false);
     setUser({});
+    navigate("/");
   };
 
   return (
@@ -59,7 +64,10 @@ const App = () => {
               <Route path="transactions/:index/edit" element={<Edit />} />
             </Route>
           ) : null}
-          <Route path="*" element={<FourOFour />} />
+          <Route
+            path="*"
+            element={<FourOFour authenticated={authenticated} />}
+          />
         </Routes>
       </section>
     </section>

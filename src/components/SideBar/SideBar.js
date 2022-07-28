@@ -1,13 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import axios from "axios";
+
 import "./SideBar.scss";
 
 import Signup from "../Signup/Signup";
-
-const API = process.env.REACT_APP_API_URL;
+import Signin from "../Signin/Signin";
 
 const SideBar = ({
   authenticated,
@@ -17,9 +16,13 @@ const SideBar = ({
   handleGuest,
   handleLogout,
 }) => {
-  const [Show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const [ShowSignup, setShowSignup] = useState(false);
+  const handleSignupClose = () => setShowSignup(false);
+  const handleSignupShow = () => setShowSignup(true);
+
+  const [ShowSignin, setShowSignin] = useState(false);
+  const handleSigninClose = () => setShowSignin(false);
+  const handleSigninShow = () => setShowSignin(true);
 
   const renderGuest = () => {
     return (
@@ -32,14 +35,28 @@ const SideBar = ({
   const renderUser = () => {
     return (
       <section>
-        <h1>user</h1>
+        <h1>{user.username}</h1>
       </section>
     );
   };
 
-  const handleNotify = (newUser, error) => {
+  const handleSignup = (newUser, error) => {
     if (error === "") {
-      toast.success(`${newUser.username} successfully signed up`, {
+      toast.success(
+        `${newUser.username} successfully signed up. \n You have been automatically logged in.`,
+        {
+          position: "top-center",
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          pauseOnFocusLoss: false,
+          draggable: true,
+          progress: undefined,
+        }
+      );
+      handleUser(newUser);
+    } else {
+      toast.error(error, {
         position: "top-center",
         hideProgressBar: false,
         closeOnClick: true,
@@ -48,6 +65,21 @@ const SideBar = ({
         draggable: true,
         progress: undefined,
       });
+    }
+  };
+
+  const handleSignin = (user, error) => {
+    if (error === "") {
+      toast.success(`${user.username} successfully signed in.`, {
+        position: "top-center",
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+        draggable: true,
+        progress: undefined,
+      });
+      handleUser(user);
     } else {
       toast.error(error, {
         position: "top-center",
@@ -63,42 +95,85 @@ const SideBar = ({
 
   return (
     <section className="SideBar">
-      {authenticated ? <>{guest ? renderGuest() : renderUser()}</> : null}
-      <h1>Menu</h1>
-      <section className="sidebarLinks">
-        <Link to="/login">
-          <Button variant="success">Login</Button>
-        </Link>
-        <br />
-        <br />
-        <Button
-          variant="primary"
-          onClick={() => {
-            handleShow();
-          }}
-        >
-          Sign up
-        </Button>
-        <br />
-        <br />
-        <Button variant="secondary" onClick={handleGuest}>
-          View as Guest
-        </Button>
-      </section>
+      {authenticated ? (
+        <section>
+          {guest ? renderGuest() : renderUser()}
+          <Button variant="primary" onClick={handleLogout}>
+            Logout
+          </Button>
+        </section>
+      ) : (
+        <section className="sidebarLinks">
+          <h1>Menu</h1>
+          <Button
+            variant="success"
+            onClick={() => {
+              handleSigninShow();
+            }}
+          >
+            Sign in
+          </Button>
 
-      <Modal className="signupModal" show={Show} onHide={handleClose} centered>
+          <br />
+          <br />
+          <Button
+            variant="primary"
+            onClick={() => {
+              handleSignupShow();
+            }}
+          >
+            Sign up
+          </Button>
+
+          <br />
+          <br />
+          <Button variant="secondary" onClick={handleGuest}>
+            View as Guest
+          </Button>
+        </section>
+      )}
+
+      {/* Signup Modal */}
+      <Modal
+        className="signupModal"
+        show={ShowSignup}
+        onHide={handleSignupClose}
+        centered
+      >
         <Modal.Header closeButton>
           <Modal.Title>Sign up</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Signup
-            handleClose={handleClose}
-            handleNotify={handleNotify}
-            // handleErrors={handleErrors}
+            handleSignupClose={handleSignupClose}
+            handleSignup={handleSignup}
           />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={handleSignupClose}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Signin Modal */}
+      <Modal
+        className="signinModal"
+        show={ShowSignin}
+        onHide={handleSigninClose}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Sign in</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Signin
+            handleSigninClose={handleSigninClose}
+            handleSignin={handleSignin}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleSigninClose}>
             Cancel
           </Button>
         </Modal.Footer>

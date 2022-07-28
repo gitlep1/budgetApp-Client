@@ -6,7 +6,7 @@ import "./Signup.scss";
 
 const API = process.env.REACT_APP_API_URL;
 
-const Signup = ({ handleClose, handleNotify }) => {
+const Signup = ({ handleSignupClose, handleSignup }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -45,12 +45,12 @@ const Signup = ({ handleClose, handleNotify }) => {
     });
 
     if (same === true) {
-      handleNotify(null, "Email already exists!");
+      handleSignup(null, "Email already exists!");
       return;
     }
 
     if (password !== confirmPassword) {
-      handleNotify(null, "Passwords do not match!");
+      handleSignup(null, "Passwords do not match!");
       return;
     }
 
@@ -62,18 +62,18 @@ const Signup = ({ handleClose, handleNotify }) => {
     };
 
     if (username === "" || password === "" || email === "") {
-      handleNotify(null, "Please fill out all fields!");
+      handleSignup(null, "Please fill out all fields!");
       return;
     }
 
     await axios
       .post(`${API}/transactions-members/users`, userData)
       .then((res) => {
-        handleNotify(userData, "");
-        handleClose();
+        handleSignup(userData, "");
+        handleSignupClose();
       })
       .catch((err) => {
-        handleNotify(null, `${err}`);
+        handleSignup(null, `${err}`);
       });
   };
 
