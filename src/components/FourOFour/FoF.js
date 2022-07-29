@@ -47,7 +47,7 @@ const FourOFour = ({ authenticated }) => {
           <Button
             variant="secondary"
             onClick={() => {
-              navigate("/homepage");
+              navigate("/");
             }}
           >
             Back to homepage

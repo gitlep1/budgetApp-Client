@@ -55,7 +55,7 @@ const App = () => {
 
         <Routes>
           <Route path="/">
-            <Route path="/homepage" element={<Homepage />} />
+            <Route path="/" element={<Homepage />} />
             <Route path="transactions" index element={<Index />} />
             <Route path="transactions/new" element={<New />} />
             <Route path="transactions/:index" element={<Show />} />
