@@ -33,7 +33,7 @@ const NavBar = ({ authenticated, user, guest }) => {
 
   return (
     <nav className="navbar navbar-expand-md navbar-dark bg-dark">
-      <Link to="/" className="navbar-brand">
+      <Link to="/homepage" className="navbar-brand">
         Budget App
       </Link>
       <ul className="navbar-nav mr-auto">
