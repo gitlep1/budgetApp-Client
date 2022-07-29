@@ -23,20 +23,20 @@ const App = () => {
   const handleGuest = () => {
     setGuest(true);
     setAuthenticated(true);
-    navigate("/authenticated/transactions");
+    navigate("/transactions");
   };
 
   const handleUser = (user) => {
     setUser(user);
     setAuthenticated(true);
-    navigate("/authenticated/transactions");
+    navigate("/transactions");
   };
 
   const handleLogout = () => {
     setAuthenticated(false);
     setGuest(false);
     setUser({});
-    navigate("/");
+    navigate("/transactions");
   };
 
   return (
@@ -54,16 +54,22 @@ const App = () => {
         />
 
         <Routes>
-          <Route path="/" element={<Homepage />} />
+          {/* <Route path="/" element={<Homepage />}> */}
+          <Route path="/">
+            <Route path="transactions" index element={<Index />} />
+            <Route path="transactions/new" element={<New />} />
+            <Route path="transactions/:index" element={<Show />} />
+            <Route path="transactions/:index/edit" element={<Edit />} />
+          </Route>
 
-          {authenticated ? (
-            <Route path="/authenticated">
+          {/* {authenticated ? (
+            <Route path="/">
               <Route path="transactions" index element={<Index />} />
               <Route path="transactions/new" element={<New />} />
               <Route path="transactions/:index" element={<Show />} />
               <Route path="transactions/:index/edit" element={<Edit />} />
             </Route>
-          ) : null}
+          ) : null} */}
           <Route
             path="*"
             element={<FourOFour authenticated={authenticated} />}

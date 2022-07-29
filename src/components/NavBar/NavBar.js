@@ -36,26 +36,42 @@ const NavBar = ({ authenticated, user, guest }) => {
       <Link to="/" className="navbar-brand">
         Budget App
       </Link>
-      {authenticated ? (
+      <ul className="navbar-nav mr-auto">
+        <li className="nav-item">
+          <Link to="/transactions" className="nav-link">
+            Transactions
+          </Link>
+        </li>
+        <li>
+          <Link to="/transactions/new" className="nav-link">
+            New Transaction
+          </Link>
+        </li>
+      </ul>
+      {/* {authenticated ? (
         <ul className="navbar-nav mr-auto">
           <li className="nav-item">
-            <Link to="authenticated/transactions" className="nav-link">
+            <Link to="/transactions" className="nav-link">
               Transactions
             </Link>
           </li>
           <li>
-            <Link to="authenticated/transactions/new" className="nav-link">
+            <Link to="/transactions/new" className="nav-link">
               New Transaction
             </Link>
           </li>
         </ul>
-      ) : null}
-      {authenticated ? (
+      ) : null} */}
+      <div className="authStuff">
+        {guest ? <h3>Guest</h3> : <h3>{user.username}</h3>}
+        Total: ${transactionTotal(transactions)}
+      </div>
+      {/* {authenticated ? (
         <div className="authStuff">
           {guest ? <h3>Guest</h3> : <h3>{user.username}</h3>}
           Total: ${transactionTotal(transactions)}
         </div>
-      ) : null}
+      ) : null} */}
     </nav>
   );
 };

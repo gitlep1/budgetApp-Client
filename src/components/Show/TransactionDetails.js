@@ -50,7 +50,7 @@ const TransactionDetails = () => {
       }
     );
     setTimeout(() => {
-      navigate("/authenticated/transactions");
+      navigate("/transactions");
     }, 4100);
   };
 
@@ -64,10 +64,10 @@ const TransactionDetails = () => {
       <h3>Category: {transaction.category}</h3>
 
       <section className="transactionLinks">
-        <Link to="/authenticated/transactions">
+        <Link to="/transactions">
           <Button variant="primary">Back to Transactions</Button>
         </Link>
-        <Link to={`/authenticated/transactions/${index}/edit`}>
+        <Link to={`/transactions/${index}/edit`}>
           <Button variant="secondary">Edit Transaction</Button>
         </Link>
         <Button

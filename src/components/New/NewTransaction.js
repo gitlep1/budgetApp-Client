@@ -70,7 +70,7 @@ const NewTransaction = () => {
       }
     );
     setTimeout(() => {
-      navigate("/authenticated/transactions");
+      navigate("/transactions");
     }, 4100);
   };
 
@@ -130,7 +130,7 @@ const NewTransaction = () => {
         <Button variant="primary" type="submit">
           Submit
         </Button>
-        <Link to="/authenticated/transactions" className="transactionLink">
+        <Link to="/transactions" className="transactionLink">
           <Button variant="secondary">Cancel</Button>
         </Link>
       </Form>

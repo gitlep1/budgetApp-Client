@@ -96,7 +96,7 @@ const Transactions = () => {
                 <Button
                   variant="secondary"
                   onClick={() => {
-                    navigate(`/authenticated/transactions/${index}/edit`);
+                    navigate(`/transactions/${index}/edit`);
                   }}
                 >
                   EDIT
@@ -106,10 +106,7 @@ const Transactions = () => {
                 {formatDate(transaction.date)}
               </strong>
               <div>
-                <Link
-                  to={`/authenticated/transactions/${index}`}
-                  className="transactionLink"
-                >
+                <Link to={`/transactions/${index}`} className="transactionLink">
                   {transaction.item_name}
                 </Link>
               </div>
